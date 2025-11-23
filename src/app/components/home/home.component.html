@@ -1,0 +1,77 @@
+<div class="home-container">
+  <nav class="navbar">
+    <div class="navbar-content">
+      <div class="navbar-brand">
+        <h1>Calzado Fabianne</h1>
+        <span class="subtitle">Sistema de Gestión</span>
+      </div>
+      
+      <div class="navbar-user">
+        <div class="user-info">
+          <span class="user-name">{{ currentUser?.nombre }}</span>
+          <span class="user-cargo">{{ currentUser?.cargo }}</span>
+        </div>
+        <button class="logout-button" (click)="logout()">
+          Cerrar Sesión
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="welcome-section">
+      <h2>Bienvenido, {{ currentUser?.nombre }}! 👋</h2>
+      <p>Has iniciado sesión correctamente en el sistema de gestión de almacén.</p>
+    </div>
+
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="card-icon">📦</div>
+        <h3>Productos</h3>
+        <p>Gestiona el inventario de productos</p>
+      </div>
+
+      <div class="info-card">
+        <div class="card-icon">📥</div>
+        <h3>Entradas</h3>
+        <p>Registra las entradas de mercancía</p>
+      </div>
+
+      <div class="info-card">
+        <div class="card-icon">📤</div>
+        <h3>Salidas</h3>
+        <p>Controla las salidas del almacén</p>
+      </div>
+
+      <div class="info-card">
+        <div class="card-icon">👥</div>
+        <h3>Usuarios</h3>
+        <p>Administra los usuarios del sistema</p>
+      </div>
+    </div>
+
+    <div class="user-details">
+      <h3>Información de la Sesión</h3>
+      <div class="details-grid">
+        <div class="detail-item">
+          <span class="detail-label">Email:</span>
+          <span class="detail-value">{{ currentUser?.email }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Cargo:</span>
+          <span class="detail-value">{{ currentUser?.cargo }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Estado:</span>
+          <span class="detail-value status-active">
+            {{ currentUser?.activo ? 'Activo' : 'Inactivo' }}
+          </span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">ID Usuario:</span>
+          <span class="detail-value">{{ currentUser?.id }}</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
