@@ -9,7 +9,12 @@
       <div class="navbar-user">
         <div class="user-info">
           <span class="user-name">{{ currentUser?.nombre }}</span>
-          <span class="user-cargo">{{ currentUser?.cargo }} - {{ currentUser?.rol }}</span>
+          <span class="user-cargo" [class.admin-badge]="isAdmin" [class.personal-badge]="isPersonal">
+            {{ currentUser?.rol }}
+            @if (currentUser?.cargo) {
+              <span class="cargo-detail"> - {{ currentUser.cargo }}</span>
+            }
+          </span>
         </div>
         <button class="logout-button" (click)="logout()">
           Cerrar Sesión
@@ -77,10 +82,12 @@
           <span class="detail-label">Email:</span>
           <span class="detail-value">{{ currentUser?.email }}</span>
         </div>
-        <div class="detail-item">
-          <span class="detail-label">Cargo:</span>
-          <span class="detail-value">{{ currentUser?.cargo }}</span>
-        </div>
+        @if (currentUser?.cargo) {
+          <div class="detail-item">
+            <span class="detail-label">Cargo:</span>
+            <span class="detail-value">{{ currentUser?.cargo }}</span>
+          </div>
+        }
         <div class="detail-item">
           <span class="detail-label">Rol:</span>
           <span class="detail-value" [class.admin-role]="isAdmin" [class.personal-role]="isPersonal">

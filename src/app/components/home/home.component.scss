@@ -54,6 +54,25 @@
   .user-cargo {
     font-size: 13px;
     opacity: 0.9;
+    
+    &.admin-badge {
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    
+    &.personal-badge {
+      background-color: rgba(255, 255, 255, 0.15);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 500;
+    }
+    
+    .cargo-detail {
+      font-weight: 400;
+      opacity: 0.8;
+    }
   }
 }
 
