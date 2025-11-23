@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { UsuarioService, Usuario, CreateUsuarioRequest } from '../../services/usuario.service';
 
 @Component({
@@ -11,6 +12,7 @@ import { UsuarioService, Usuario, CreateUsuarioRequest } from '../../services/us
 })
 export class UsuariosComponent implements OnInit {
   private usuarioService = inject(UsuarioService);
+  private router = inject(Router);
 
   usuarios: Usuario[] = [];
   usuarioSeleccionado: Usuario | null = null;
@@ -134,5 +136,9 @@ export class UsuariosComponent implements OnInit {
     this.modoEdicion = false;
     this.errorMessage = '';
     this.isLoading = false;
+  }
+
+  volverAlHome(): void {
+    this.router.navigate(['/home']);
   }
 }

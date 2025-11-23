@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { EntradaService, Entrada, DetalleEntrada } from '../../services/entrada.service';
 import { ProductoService, Producto } from '../../services/producto.service';
 import { AuthService } from '../../services/auth.service';
@@ -15,6 +16,7 @@ export class EntradasComponent implements OnInit {
   private entradaService = inject(EntradaService);
   private productoService = inject(ProductoService);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   entradas: Entrada[] = [];
   productos: Producto[] = [];
@@ -155,5 +157,9 @@ export class EntradasComponent implements OnInit {
     this.errorMessage = '';
     this.isLoading = false;
     this.detalles = [];
+  }
+
+  volverAlHome(): void {
+    this.router.navigate(['/home']);
   }
 }

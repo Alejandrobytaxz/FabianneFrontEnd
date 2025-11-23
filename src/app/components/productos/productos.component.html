@@ -1,5 +1,8 @@
 <div class="productos-container">
   <div class="header">
+    <button class="btn-back" (click)="volverAlHome()">
+      ← Volver al Inicio
+    </button>
     <h1>Gestión de Productos</h1>
     @if (isAdmin) {
       <button class="btn-primary" (click)="nuevoProducto()">

@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ProductoService, Producto, CreateProductoRequest } from '../../services/producto.service';
 import { CategoriaService, Categoria } from '../../services/categoria.service';
 import { AuthService } from '../../services/auth.service';
@@ -15,6 +16,7 @@ export class ProductosComponent implements OnInit {
   private productoService = inject(ProductoService);
   private categoriaService = inject(CategoriaService);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   productos: Producto[] = [];
   categorias: Categoria[] = [];
@@ -49,7 +51,7 @@ export class ProductosComponent implements OnInit {
     this.categoriaService.getAllCategorias().subscribe({
       next: (categorias) => {
         this.categorias = categorias;
-        if (categorias.length > 0 && this.formulario.categoriaId === 0) {
+        if (categorias.length > 0 && !this.formulario.categoriaId) {
           this.formulario.categoriaId = categorias[0].id;
         }
       },
@@ -57,6 +59,10 @@ export class ProductosComponent implements OnInit {
         console.error('Error al cargar categorías:', error);
       }
     });
+  }
+
+  volverAlHome(): void {
+    this.router.navigate(['/home']);
   }
 
   cargarProductos(): void {

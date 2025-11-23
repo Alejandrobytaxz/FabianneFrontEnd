@@ -48,6 +48,16 @@
         }
       </div>
 
+      <!-- Categorías - Solo Admin -->
+      @if (isAdmin) {
+        <div class="info-card" (click)="navigateTo('/categorias')">
+          <div class="card-icon">🏷️</div>
+          <h3>Categorías</h3>
+          <p>Administra las categorías de productos</p>
+          <span class="permission-tag">Solo Administrador</span>
+        </div>
+      }
+
       <!-- Entradas - Todos pueden gestionar -->
       <div class="info-card" (click)="navigateTo('/entradas')">
         <div class="card-icon">📥</div>
@@ -111,6 +121,10 @@
           <div class="permission-item granted">
             <span class="icon">✓</span>
             <span>Crear, editar y eliminar productos</span>
+          </div>
+          <div class="permission-item granted">
+            <span class="icon">✓</span>
+            <span>Gestionar categorías de productos</span>
           </div>
           <div class="permission-item granted">
             <span class="icon">✓</span>

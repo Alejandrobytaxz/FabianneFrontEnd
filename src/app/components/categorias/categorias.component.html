@@ -1,0 +1,105 @@
+<div class="categorias-container">
+  <div class="header">
+    <button class="btn-back" (click)="volverAlHome()">
+      ← Volver al Inicio
+    </button>
+    <h1>Gestión de Categorías</h1>
+    <button class="btn-primary" (click)="nuevaCategoria()">
+      + Nueva Categoría
+    </button>
+  </div>
+
+  @if (errorMessage) {
+    <div class="error-banner">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (isLoading) {
+    <div class="loading">Cargando...</div>
+  }
+
+  <!-- Formulario de Categoría -->
+  @if (mostrarFormulario) {
+    <div class="formulario-card">
+      <h2>{{ modoEdicion ? 'Editar Categoría' : 'Nueva Categoría' }}</h2>
+      
+      <form (ngSubmit)="guardarCategoria()" class="form-grid">
+        <div class="form-group">
+          <label for="nombre">Nombre *</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            [(ngModel)]="formulario.nombre"
+            required
+            placeholder="Ej: Zapatos Casuales"
+          />
+        </div>
+
+        <div class="form-group full-width">
+          <label for="descripcion">Descripción</label>
+          <textarea
+            id="descripcion"
+            name="descripcion"
+            [(ngModel)]="formulario.descripcion"
+            rows="3"
+            placeholder="Descripción de la categoría..."
+          ></textarea>
+        </div>
+
+        <div class="form-actions full-width">
+          <button type="submit" class="btn-primary" [disabled]="isLoading">
+            {{ modoEdicion ? 'Actualizar' : 'Crear' }}
+          </button>
+          <button type="button" class="btn-secondary" (click)="cancelar()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Tabla de Categorías -->
+  @if (!mostrarFormulario) {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>N° Productos</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (categoria of categorias; track categoria.id) {
+            <tr>
+              <td><strong>{{ categoria.nombre }}</strong></td>
+              <td>{{ categoria.descripcion || 'Sin descripción' }}</td>
+              <td>
+                <span class="badge-count">
+                  {{ categoria._count?.productos || 0 }}
+                </span>
+              </td>
+              <td class="acciones">
+                <button class="btn-icon" (click)="editarCategoria(categoria)" title="Editar">
+                  ✏️
+                </button>
+                <button class="btn-icon delete" (click)="eliminarCategoria(categoria)" title="Eliminar">
+                  🗑️
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4" class="empty-message">
+                No hay categorías registradas. Crea la primera categoría.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

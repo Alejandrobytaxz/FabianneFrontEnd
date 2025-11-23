@@ -1,4 +1,4 @@
-.usuarios-container {
+.categorias-container {
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
@@ -40,7 +40,6 @@
     text-align: center;
     padding: 2rem;
     color: #64748b;
-    font-size: 1.1rem;
   }
 
   .error-banner {
@@ -117,7 +116,7 @@
           margin-bottom: 0.5rem;
         }
 
-        input, select {
+        input, textarea {
           padding: 0.75rem;
           border: 1px solid #cbd5e1;
           border-radius: 6px;
@@ -128,6 +127,11 @@
             outline: none;
             border-color: #1e3a8a;
           }
+        }
+
+        textarea {
+          resize: vertical;
+          font-family: inherit;
         }
       }
 
@@ -178,40 +182,21 @@
               gap: 0.5rem;
             }
 
-            .rol-badge {
-              padding: 0.25rem 0.75rem;
-              border-radius: 20px;
-              font-size: 0.85rem;
-              font-weight: 600;
-              display: inline-block;
-
-              &.admin {
-                background-color: #dbeafe;
-                color: #1e3a8a;
-              }
-
-              &.personal {
-                background-color: #e0e7ff;
-                color: #4338ca;
-              }
+            &.empty-message {
+              text-align: center;
+              padding: 3rem;
+              color: #64748b;
+              font-style: italic;
             }
 
-            .estado-badge {
+            .badge-count {
+              background-color: #dbeafe;
+              color: #1e3a8a;
               padding: 0.25rem 0.75rem;
               border-radius: 20px;
-              font-size: 0.85rem;
               font-weight: 600;
+              font-size: 0.9rem;
               display: inline-block;
-
-              &.activo {
-                background-color: #dcfce7;
-                color: #16a34a;
-              }
-
-              &.inactivo {
-                background-color: #fee2e2;
-                color: #dc2626;
-              }
             }
 
             .btn-icon {
