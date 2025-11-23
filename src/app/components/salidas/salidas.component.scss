@@ -1,0 +1,321 @@
+.salidas-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    h1 {
+      color: #1e3a8a;
+      font-size: 2rem;
+      margin: 0;
+    }
+  }
+
+  .loading {
+    text-align: center;
+    padding: 2rem;
+    color: #64748b;
+  }
+
+  .error-banner {
+    background-color: #fee;
+    border-left: 4px solid #dc2626;
+    color: #991b1b;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 4px;
+  }
+
+  .btn-primary, .btn-secondary, .btn-add, .btn-delete, .btn-icon {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+    color: white;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.4);
+    }
+  }
+
+  .btn-secondary {
+    background-color: #e2e8f0;
+    color: #334155;
+
+    &:hover {
+      background-color: #cbd5e1;
+    }
+  }
+
+  .btn-add {
+    background-color: #16a34a;
+    color: white;
+    padding: 0.5rem 1rem;
+
+    &:hover {
+      background-color: #15803d;
+    }
+  }
+
+  .btn-delete, .btn-icon {
+    background: none;
+    padding: 0.25rem 0.5rem;
+    font-size: 1.2rem;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+
+  .formulario-card, .detalle-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+
+    h2 {
+      color: #1e3a8a;
+      margin-bottom: 1.5rem;
+    }
+
+    h3 {
+      color: #334155;
+      margin: 1.5rem 0 1rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+
+        &.full-width {
+          grid-column: 1 / -1;
+        }
+
+        label {
+          font-weight: 500;
+          color: #334155;
+          margin-bottom: 0.5rem;
+        }
+
+        input, select, textarea {
+          padding: 0.75rem;
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+          font-size: 1rem;
+
+          &:focus {
+            outline: none;
+            border-color: #1e3a8a;
+          }
+        }
+      }
+    }
+
+    .detalles-section {
+      border-top: 2px solid #e2e8f0;
+      padding-top: 1.5rem;
+
+      .detalle-form {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+
+        .select-producto {
+          padding: 0.5rem;
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+        }
+
+        .input-small {
+          padding: 0.5rem;
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+        }
+      }
+
+      .detalles-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+
+        thead {
+          background-color: #f1f5f9;
+
+          th {
+            padding: 0.75rem;
+            text-align: left;
+            color: #475569;
+            font-weight: 600;
+            border-bottom: 2px solid #e2e8f0;
+          }
+        }
+
+        tbody {
+          tr {
+            border-bottom: 1px solid #e2e8f0;
+
+            &.total-row {
+              background-color: #f8fafc;
+              font-size: 1.1rem;
+            }
+
+            td {
+              padding: 0.75rem;
+              color: #334155;
+            }
+          }
+        }
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .detalle-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+
+      .detalle-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        strong {
+          color: #64748b;
+          font-size: 0.9rem;
+        }
+
+        span {
+          color: #0f172a;
+          font-size: 1.1rem;
+
+          &.total {
+            color: #dc2626;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+
+    .observaciones {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background-color: #f8fafc;
+      border-radius: 6px;
+
+      strong {
+        color: #64748b;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        margin: 0;
+        color: #334155;
+      }
+    }
+
+    .detalles-list {
+      margin: 1.5rem 0;
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+
+        thead {
+          background-color: #f1f5f9;
+
+          th {
+            padding: 0.75rem;
+            text-align: left;
+            color: #475569;
+            font-weight: 600;
+            border-bottom: 2px solid #e2e8f0;
+          }
+        }
+
+        tbody tr {
+          border-bottom: 1px solid #e2e8f0;
+
+          td {
+            padding: 0.75rem;
+            color: #334155;
+          }
+        }
+      }
+    }
+  }
+
+  .salidas-list {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      thead {
+        background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+        color: white;
+
+        th {
+          padding: 1rem;
+          text-align: left;
+          font-weight: 600;
+        }
+      }
+
+      tbody {
+        tr {
+          border-bottom: 1px solid #e2e8f0;
+
+          &:hover {
+            background-color: #f8fafc;
+          }
+
+          td {
+            padding: 1rem;
+            color: #334155;
+
+            &.total {
+              color: #dc2626;
+              font-weight: 600;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -27,4 +27,8 @@ export class HomeComponent {
   logout(): void {
     this.authService.logout();
   }
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
 }

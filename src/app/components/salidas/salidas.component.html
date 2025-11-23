@@ -1,0 +1,272 @@
+<div class="salidas-container">
+  <div class="header">
+    <h1>Gestión de Salidas</h1>
+    <button class="btn-primary" (click)="nuevaSalida()">
+      + Nueva Salida
+    </button>
+  </div>
+
+  @if (errorMessage) {
+    <div class="error-banner">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (isLoading) {
+    <div class="loading">Cargando...</div>
+  }
+
+  <!-- Formulario de Salida -->
+  @if (mostrarFormulario) {
+    <div class="formulario-card">
+      <h2>Nueva Salida de Productos</h2>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="numeroDocumento">N° Documento *</label>
+          <input
+            type="text"
+            id="numeroDocumento"
+            name="numeroDocumento"
+            [(ngModel)]="formulario.numeroDocumento"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="tipoSalida">Tipo Salida *</label>
+          <select
+            id="tipoSalida"
+            name="tipoSalida"
+            [(ngModel)]="formulario.tipoSalida"
+          >
+            <option value="Venta">Venta</option>
+            <option value="Devolución">Devolución</option>
+            <option value="Pérdida">Pérdida</option>
+            <option value="Traslado">Traslado</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="destinatario">Destinatario</label>
+          <input
+            type="text"
+            id="destinatario"
+            name="destinatario"
+            [(ngModel)]="formulario.destinatario"
+          />
+        </div>
+
+        <div class="form-group full-width">
+          <label for="observaciones">Observaciones</label>
+          <textarea
+            id="observaciones"
+            name="observaciones"
+            [(ngModel)]="formulario.observaciones"
+            rows="2"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Agregar Detalles -->
+      <div class="detalles-section">
+        <h3>Agregar Productos</h3>
+        <div class="detalle-form">
+          <select [(ngModel)]="nuevoDetalle.productoId" class="select-producto">
+            <option value="0">Seleccione un producto</option>
+            @for (producto of productos; track producto.id) {
+              <option [value]="producto.id">{{ producto.nombre }}</option>
+            }
+          </select>
+
+          <input
+            type="text"
+            [(ngModel)]="nuevoDetalle.talla"
+            placeholder="Talla"
+            class="input-small"
+          />
+
+          <input
+            type="text"
+            [(ngModel)]="nuevoDetalle.color"
+            placeholder="Color"
+            class="input-small"
+          />
+
+          <input
+            type="number"
+            [(ngModel)]="nuevoDetalle.cantidad"
+            placeholder="Cantidad"
+            min="1"
+            class="input-small"
+          />
+
+          <input
+            type="number"
+            [(ngModel)]="nuevoDetalle.precioUnitario"
+            placeholder="Precio Unit."
+            step="0.01"
+            min="0"
+            class="input-small"
+          />
+
+          <button type="button" class="btn-add" (click)="agregarDetalle()">
+            + Agregar
+          </button>
+        </div>
+
+        <!-- Tabla de Detalles -->
+        @if (detalles.length > 0) {
+          <table class="detalles-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Talla</th>
+                <th>Color</th>
+                <th>Cantidad</th>
+                <th>Precio Unit.</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (detalle of detalles; track $index) {
+                <tr>
+                  <td>{{ getProductoNombre(detalle.productoId) }}</td>
+                  <td>{{ detalle.talla }}</td>
+                  <td>{{ detalle.color }}</td>
+                  <td>{{ detalle.cantidad }}</td>
+                  <td>S/ {{ detalle.precioUnitario }}</td>
+                  <td>S/ {{ calcularSubtotal(detalle) }}</td>
+                  <td>
+                    <button type="button" class="btn-delete" (click)="eliminarDetalle($index)">
+                      🗑️
+                    </button>
+                  </td>
+                </tr>
+              }
+              <tr class="total-row">
+                <td colspan="5"><strong>TOTAL</strong></td>
+                <td colspan="2"><strong>S/ {{ calcularTotal() }}</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        }
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-primary" (click)="guardarSalida()" [disabled]="isLoading">
+          Registrar Salida
+        </button>
+        <button type="button" class="btn-secondary" (click)="cancelar()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Detalle de Salida -->
+  @if (salidaSeleccionada && !mostrarFormulario) {
+    <div class="detalle-card">
+      <h2>Salida #{{ salidaSeleccionada.numeroDocumento }}</h2>
+      
+      <div class="detalle-grid">
+        <div class="detalle-item">
+          <strong>Fecha:</strong>
+          <span>{{ salidaSeleccionada.fechaSalida | date: 'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+        <div class="detalle-item">
+          <strong>Tipo Salida:</strong>
+          <span>{{ salidaSeleccionada.tipoSalida }}</span>
+        </div>
+        <div class="detalle-item">
+          <strong>Destinatario:</strong>
+          <span>{{ salidaSeleccionada.destinatario || 'N/A' }}</span>
+        </div>
+        <div class="detalle-item">
+          <strong>Usuario:</strong>
+          <span>{{ salidaSeleccionada.usuario?.nombre }}</span>
+        </div>
+        <div class="detalle-item">
+          <strong>Total:</strong>
+          <span class="total">S/ {{ salidaSeleccionada.total }}</span>
+        </div>
+      </div>
+
+      @if (salidaSeleccionada.observaciones) {
+        <div class="observaciones">
+          <strong>Observaciones:</strong>
+          <p>{{ salidaSeleccionada.observaciones }}</p>
+        </div>
+      }
+
+      @if (salidaSeleccionada.detalles && salidaSeleccionada.detalles.length > 0) {
+        <div class="detalles-list">
+          <h3>Productos</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Talla</th>
+                <th>Color</th>
+                <th>Cantidad</th>
+                <th>Precio Unit.</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (detalle of salidaSeleccionada.detalles; track detalle.id) {
+                <tr>
+                  <td>{{ detalle.producto?.nombre }}</td>
+                  <td>{{ detalle.talla }}</td>
+                  <td>{{ detalle.color }}</td>
+                  <td>{{ detalle.cantidad }}</td>
+                  <td>S/ {{ detalle.precioUnitario }}</td>
+                  <td>S/ {{ detalle.subtotal }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+      <button class="btn-secondary" (click)="salidaSeleccionada = null">
+        Cerrar
+      </button>
+    </div>
+  }
+
+  <!-- Lista de Salidas -->
+  @if (!mostrarFormulario && !salidaSeleccionada) {
+    <div class="salidas-list">
+      <table>
+        <thead>
+          <tr>
+            <th>N° Documento</th>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Destinatario</th>
+            <th>Total</th>
+            <th>Usuario</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (salida of salidas; track salida.id) {
+            <tr>
+              <td>{{ salida.numeroDocumento }}</td>
+              <td>{{ salida.fechaSalida | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ salida.tipoSalida }}</td>
+              <td>{{ salida.destinatario || 'N/A' }}</td>
+              <td class="total">S/ {{ salida.total }}</td>
+              <td>{{ salida.usuario?.nombre }}</td>
+              <td>
+                <button class="btn-icon" (click)="verDetalle(salida)">👁️</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

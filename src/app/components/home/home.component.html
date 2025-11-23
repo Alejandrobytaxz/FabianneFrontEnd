@@ -36,7 +36,7 @@
 
     <div class="info-cards">
       <!-- Productos - Todos pueden ver, solo Admin puede editar -->
-      <div class="info-card">
+      <div class="info-card" (click)="navigateTo('/productos')">
         <div class="card-icon">📦</div>
         <h3>Productos</h3>
         @if (isAdmin) {
@@ -49,7 +49,7 @@
       </div>
 
       <!-- Entradas - Todos pueden gestionar -->
-      <div class="info-card">
+      <div class="info-card" (click)="navigateTo('/entradas')">
         <div class="card-icon">📥</div>
         <h3>Entradas</h3>
         <p>Registra las entradas de mercancía</p>
@@ -57,7 +57,7 @@
       </div>
 
       <!-- Salidas - Todos pueden gestionar -->
-      <div class="info-card">
+      <div class="info-card" (click)="navigateTo('/salidas')">
         <div class="card-icon">📤</div>
         <h3>Salidas</h3>
         <p>Controla las salidas del almacén</p>
@@ -66,7 +66,7 @@
 
       <!-- Usuarios - Solo Admin -->
       @if (isAdmin) {
-        <div class="info-card">
+        <div class="info-card" (click)="navigateTo('/usuarios')">
           <div class="card-icon">👥</div>
           <h3>Usuarios</h3>
           <p>Administra los usuarios del sistema</p>

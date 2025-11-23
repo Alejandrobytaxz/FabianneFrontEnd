@@ -1,0 +1,139 @@
+<div class="usuarios-container">
+  <div class="header">
+    <h1>Gestión de Usuarios</h1>
+    <button class="btn-primary" (click)="nuevoUsuario()">
+      + Nuevo Usuario
+    </button>
+  </div>
+
+  @if (errorMessage) {
+    <div class="error-banner">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (isLoading) {
+    <div class="loading">Cargando...</div>
+  }
+
+  <!-- Formulario de Usuario -->
+  @if (mostrarFormulario) {
+    <div class="formulario-card">
+      <h2>{{ modoEdicion ? 'Editar Usuario' : 'Nuevo Usuario' }}</h2>
+      
+      <form (ngSubmit)="guardarUsuario()" class="form-grid">
+        <div class="form-group">
+          <label for="nombre">Nombre *</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            [(ngModel)]="formulario.nombre"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Correo Electrónico *</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="formulario.email"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="cargo">Cargo</label>
+          <input
+            type="text"
+            id="cargo"
+            name="cargo"
+            [(ngModel)]="formulario.cargo"
+            placeholder="Ej: Gerente de Almacén"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="rol">Rol *</label>
+          <select
+            id="rol"
+            name="rol"
+            [(ngModel)]="formulario.rol"
+            required
+          >
+            <option value="Personal">Personal</option>
+            <option value="Administrador">Administrador</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="password">{{ modoEdicion ? 'Nueva Contraseña (opcional)' : 'Contraseña *' }}</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            [(ngModel)]="formulario.password"
+            [required]="!modoEdicion"
+            placeholder="••••••••"
+          />
+        </div>
+
+        <div class="form-actions full-width">
+          <button type="submit" class="btn-primary" [disabled]="isLoading">
+            {{ modoEdicion ? 'Actualizar' : 'Crear' }}
+          </button>
+          <button type="button" class="btn-secondary" (click)="cancelar()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Tabla de Usuarios -->
+  @if (!mostrarFormulario) {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Cargo</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (usuario of usuarios; track usuario.id) {
+            <tr>
+              <td>{{ usuario.nombre }}</td>
+              <td>{{ usuario.email }}</td>
+              <td>
+                <span class="rol-badge" [class.admin]="usuario.rol === 'Administrador'" [class.personal]="usuario.rol === 'Personal'">
+                  {{ usuario.rol }}
+                </span>
+              </td>
+              <td>{{ usuario.cargo || 'N/A' }}</td>
+              <td>
+                <span class="estado-badge" [class.activo]="usuario.activo" [class.inactivo]="!usuario.activo">
+                  {{ usuario.activo ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td class="acciones">
+                <button class="btn-icon" (click)="editarUsuario(usuario)" title="Editar">
+                  ✏️
+                </button>
+                <button class="btn-icon delete" (click)="eliminarUsuario(usuario)" title="Eliminar">
+                  🗑️
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

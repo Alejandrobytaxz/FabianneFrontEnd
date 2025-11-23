@@ -1,0 +1,247 @@
+<div class="productos-container">
+  <div class="header">
+    <h1>Gestión de Productos</h1>
+    @if (isAdmin) {
+      <button class="btn-primary" (click)="nuevoProducto()">
+        + Nuevo Producto
+      </button>
+    }
+  </div>
+
+  @if (errorMessage) {
+    <div class="error-banner">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (isLoading) {
+    <div class="loading">Cargando...</div>
+  }
+
+  <!-- Formulario de Producto -->
+  @if (mostrarFormulario && isAdmin) {
+    <div class="formulario-card">
+      <h2>{{ modoEdicion ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+      
+      <form (ngSubmit)="guardarProducto()" class="form-grid">
+        <div class="form-group">
+          <label for="codigo">Código *</label>
+          <input
+            type="text"
+            id="codigo"
+            name="codigo"
+            [(ngModel)]="formulario.codigo"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="nombre">Nombre *</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            [(ngModel)]="formulario.nombre"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="marca">Marca</label>
+          <input
+            type="text"
+            id="marca"
+            name="marca"
+            [(ngModel)]="formulario.marca"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="categoriaId">Categoría *</label>
+          <input
+            type="number"
+            id="categoriaId"
+            name="categoriaId"
+            [(ngModel)]="formulario.categoriaId"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="precioCompra">Precio Compra *</label>
+          <input
+            type="number"
+            id="precioCompra"
+            name="precioCompra"
+            [(ngModel)]="formulario.precioCompra"
+            step="0.01"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="precioVenta">Precio Venta *</label>
+          <input
+            type="number"
+            id="precioVenta"
+            name="precioVenta"
+            [(ngModel)]="formulario.precioVenta"
+            step="0.01"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="stockMinimo">Stock Mínimo *</label>
+          <input
+            type="number"
+            id="stockMinimo"
+            name="stockMinimo"
+            [(ngModel)]="formulario.stockMinimo"
+            required
+          />
+        </div>
+
+        <div class="form-group full-width">
+          <label for="descripcion">Descripción</label>
+          <textarea
+            id="descripcion"
+            name="descripcion"
+            [(ngModel)]="formulario.descripcion"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div class="form-actions full-width">
+          <button type="submit" class="btn-primary" [disabled]="isLoading">
+            {{ modoEdicion ? 'Actualizar' : 'Crear' }}
+          </button>
+          <button type="button" class="btn-secondary" (click)="cancelar()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Detalle de Producto -->
+  @if (productoSeleccionado && !mostrarFormulario) {
+    <div class="detalle-card">
+      <div class="detalle-header">
+        <h2>{{ productoSeleccionado.nombre }}</h2>
+        @if (isAdmin) {
+          <button class="btn-edit" (click)="editarProducto(productoSeleccionado)">
+            Editar
+          </button>
+        }
+      </div>
+
+      <div class="detalle-grid">
+        <div class="detalle-item">
+          <strong>Código:</strong>
+          <span>{{ productoSeleccionado.codigo }}</span>
+        </div>
+        <div class="detalle-item">
+          <strong>Marca:</strong>
+          <span>{{ productoSeleccionado.marca || 'N/A' }}</span>
+        </div>
+        <div class="detalle-item">
+          <strong>Categoría:</strong>
+          <span>{{ productoSeleccionado.categoria?.nombre || 'N/A' }}</span>
+        </div>
+        <div class="detalle-item">
+          <strong>Precio Compra:</strong>
+          <span>S/ {{ productoSeleccionado.precioCompra }}</span>
+        </div>
+        <div class="detalle-item">
+          <strong>Precio Venta:</strong>
+          <span>S/ {{ productoSeleccionado.precioVenta }}</span>
+        </div>
+        <div class="detalle-item">
+          <strong>Stock Mínimo:</strong>
+          <span>{{ productoSeleccionado.stockMinimo }}</span>
+        </div>
+        <div class="detalle-item">
+          <strong>Stock Total:</strong>
+          <span class="stock-badge">{{ calcularStockTotal(productoSeleccionado) }}</span>
+        </div>
+        <div class="detalle-item">
+          <strong>Estado:</strong>
+          <span [class.activo]="productoSeleccionado.activo" [class.inactivo]="!productoSeleccionado.activo">
+            {{ productoSeleccionado.activo ? 'Activo' : 'Inactivo' }}
+          </span>
+        </div>
+      </div>
+
+      @if (productoSeleccionado.descripcion) {
+        <div class="descripcion">
+          <strong>Descripción:</strong>
+          <p>{{ productoSeleccionado.descripcion }}</p>
+        </div>
+      }
+
+      <!-- Detalles de Stock por Talla y Color -->
+      @if (productoSeleccionado.detalles && productoSeleccionado.detalles.length > 0) {
+        <div class="stock-detalles">
+          <h3>Stock por Talla y Color</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Talla</th>
+                <th>Color</th>
+                <th>Stock</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (detalle of productoSeleccionado.detalles; track detalle.id) {
+                <tr>
+                  <td>{{ detalle.talla }}</td>
+                  <td>{{ detalle.color }}</td>
+                  <td>
+                    <span class="stock-value" [class.bajo-stock]="detalle.stock < productoSeleccionado.stockMinimo">
+                      {{ detalle.stock }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+      <button class="btn-secondary" (click)="productoSeleccionado = null">
+        Cerrar
+      </button>
+    </div>
+  }
+
+  <!-- Lista de Productos -->
+  @if (!mostrarFormulario && !productoSeleccionado) {
+    <div class="productos-grid">
+      @for (producto of productos; track producto.id) {
+        <div class="producto-card" (click)="verDetalle(producto)">
+          <div class="producto-header">
+            <h3>{{ producto.nombre }}</h3>
+            <span class="codigo">{{ producto.codigo }}</span>
+          </div>
+          <div class="producto-info">
+            <div class="info-row">
+              <span class="label">Marca:</span>
+              <span>{{ producto.marca || 'N/A' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Precio:</span>
+              <span class="precio">S/ {{ producto.precioVenta }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Stock:</span>
+              <span class="stock" [class.bajo-stock]="calcularStockTotal(producto) < producto.stockMinimo">
+                {{ calcularStockTotal(producto) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
