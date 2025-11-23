@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductoService, Producto, CreateProductoRequest } from '../../services/producto.service';
+import { CategoriaService, Categoria } from '../../services/categoria.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -12,9 +13,11 @@ import { AuthService } from '../../services/auth.service';
 })
 export class ProductosComponent implements OnInit {
   private productoService = inject(ProductoService);
+  private categoriaService = inject(CategoriaService);
   private authService = inject(AuthService);
 
   productos: Producto[] = [];
+  categorias: Categoria[] = [];
   productoSeleccionado: Producto | null = null;
   mostrarFormulario = false;
   modoEdicion = false;
@@ -26,7 +29,7 @@ export class ProductosComponent implements OnInit {
     codigo: '',
     nombre: '',
     descripcion: '',
-    categoriaId: 1,
+    categoriaId: 0,
     marca: '',
     precioCompra: 0,
     precioVenta: 0,
@@ -39,6 +42,21 @@ export class ProductosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarProductos();
+    this.cargarCategorias();
+  }
+
+  cargarCategorias(): void {
+    this.categoriaService.getAllCategorias().subscribe({
+      next: (categorias) => {
+        this.categorias = categorias;
+        if (categorias.length > 0 && this.formulario.categoriaId === 0) {
+          this.formulario.categoriaId = categorias[0].id;
+        }
+      },
+      error: (error) => {
+        console.error('Error al cargar categorías:', error);
+      }
+    });
   }
 
   cargarProductos(): void {
@@ -69,7 +87,7 @@ export class ProductosComponent implements OnInit {
       codigo: '',
       nombre: '',
       descripcion: '',
-      categoriaId: 1,
+      categoriaId: this.categorias.length > 0 ? this.categorias[0].id : 0,
       marca: '',
       precioCompra: 0,
       precioVenta: 0,
