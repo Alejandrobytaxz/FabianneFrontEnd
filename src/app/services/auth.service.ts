@@ -23,6 +23,7 @@ export interface AuthResponse {
     nombre: string;
     cargo: string;
     email: string;
+    rol: string;
     activo: boolean;
   };
 }
@@ -81,5 +82,20 @@ export class AuthService {
 
   getCurrentUser(): any {
     return this.currentUserSubject.value;
+  }
+
+  isAdmin(): boolean {
+    const user = this.getCurrentUser();
+    return user?.rol === 'Administrador';
+  }
+
+  isPersonal(): boolean {
+    const user = this.getCurrentUser();
+    return user?.rol === 'Personal';
+  }
+
+  getUserRole(): string | null {
+    const user = this.getCurrentUser();
+    return user?.rol || null;
   }
 }

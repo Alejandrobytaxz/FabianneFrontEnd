@@ -15,6 +15,15 @@ export class HomeComponent {
 
   currentUser = this.authService.getCurrentUser();
 
+  // Verificación de roles
+  get isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+
+  get isPersonal(): boolean {
+    return this.authService.isPersonal();
+  }
+
   logout(): void {
     this.authService.logout();
   }

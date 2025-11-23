@@ -9,7 +9,7 @@
       <div class="navbar-user">
         <div class="user-info">
           <span class="user-name">{{ currentUser?.nombre }}</span>
-          <span class="user-cargo">{{ currentUser?.cargo }}</span>
+          <span class="user-cargo">{{ currentUser?.cargo }} - {{ currentUser?.rol }}</span>
         </div>
         <button class="logout-button" (click)="logout()">
           Cerrar Sesión
@@ -22,32 +22,52 @@
     <div class="welcome-section">
       <h2>Bienvenido, {{ currentUser?.nombre }}!</h2>
       <p>Has iniciado sesión correctamente en el sistema de gestión de almacén.</p>
+      @if (isAdmin) {
+        <p class="role-badge admin">Tienes acceso completo como Administrador</p>
+      } @else if (isPersonal) {
+        <p class="role-badge personal">Acceso de Personal - Gestión de Entradas y Salidas</p>
+      }
     </div>
 
     <div class="info-cards">
+      <!-- Productos - Todos pueden ver, solo Admin puede editar -->
       <div class="info-card">
         <div class="card-icon">📦</div>
         <h3>Productos</h3>
-        <p>Gestiona el inventario de productos</p>
+        @if (isAdmin) {
+          <p>Gestiona el inventario de productos</p>
+          <span class="permission-tag">Crear, Editar, Ver</span>
+        } @else {
+          <p>Consulta el inventario de productos</p>
+          <span class="permission-tag readonly">Solo Ver</span>
+        }
       </div>
 
+      <!-- Entradas - Todos pueden gestionar -->
       <div class="info-card">
         <div class="card-icon">📥</div>
         <h3>Entradas</h3>
         <p>Registra las entradas de mercancía</p>
+        <span class="permission-tag">Gestión Completa</span>
       </div>
 
+      <!-- Salidas - Todos pueden gestionar -->
       <div class="info-card">
         <div class="card-icon">📤</div>
         <h3>Salidas</h3>
         <p>Controla las salidas del almacén</p>
+        <span class="permission-tag">Gestión Completa</span>
       </div>
 
-      <div class="info-card">
-        <div class="card-icon">👥</div>
-        <h3>Usuarios</h3>
-        <p>Administra los usuarios del sistema</p>
-      </div>
+      <!-- Usuarios - Solo Admin -->
+      @if (isAdmin) {
+        <div class="info-card">
+          <div class="card-icon">👥</div>
+          <h3>Usuarios</h3>
+          <p>Administra los usuarios del sistema</p>
+          <span class="permission-tag">Solo Administrador</span>
+        </div>
+      }
     </div>
 
     <div class="user-details">
@@ -62,15 +82,67 @@
           <span class="detail-value">{{ currentUser?.cargo }}</span>
         </div>
         <div class="detail-item">
+          <span class="detail-label">Rol:</span>
+          <span class="detail-value" [class.admin-role]="isAdmin" [class.personal-role]="isPersonal">
+            {{ currentUser?.rol }}
+          </span>
+        </div>
+        <div class="detail-item">
           <span class="detail-label">Estado:</span>
           <span class="detail-value status-active">
             {{ currentUser?.activo ? 'Activo' : 'Inactivo' }}
           </span>
         </div>
-        <div class="detail-item">
-          <span class="detail-label">ID Usuario:</span>
-          <span class="detail-value">{{ currentUser?.id }}</span>
-        </div>
+      </div>
+    </div>
+
+    <!-- Sección de permisos detallados -->
+    <div class="permissions-section">
+      <h3>Permisos de {{ currentUser?.rol }}</h3>
+      <div class="permissions-list">
+        @if (isAdmin) {
+          <div class="permission-item granted">
+            <span class="icon">✓</span>
+            <span>Crear, editar y eliminar productos</span>
+          </div>
+          <div class="permission-item granted">
+            <span class="icon">✓</span>
+            <span>Gestionar entradas de almacén</span>
+          </div>
+          <div class="permission-item granted">
+            <span class="icon">✓</span>
+            <span>Gestionar salidas de almacén</span>
+          </div>
+          <div class="permission-item granted">
+            <span class="icon">✓</span>
+            <span>Crear, editar y eliminar usuarios</span>
+          </div>
+          <div class="permission-item granted">
+            <span class="icon">✓</span>
+            <span>Acceso completo a reportes y estadísticas</span>
+          </div>
+        } @else if (isPersonal) {
+          <div class="permission-item granted">
+            <span class="icon">✓</span>
+            <span>Ver productos y consultar stock</span>
+          </div>
+          <div class="permission-item granted">
+            <span class="icon">✓</span>
+            <span>Gestionar entradas de almacén</span>
+          </div>
+          <div class="permission-item granted">
+            <span class="icon">✓</span>
+            <span>Gestionar salidas de almacén</span>
+          </div>
+          <div class="permission-item denied">
+            <span class="icon">✗</span>
+            <span>Crear o editar productos</span>
+          </div>
+          <div class="permission-item denied">
+            <span class="icon">✗</span>
+            <span>Gestionar usuarios</span>
+          </div>
+        }
       </div>
     </div>
   </main>
