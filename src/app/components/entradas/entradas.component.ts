@@ -132,11 +132,19 @@ export class EntradasComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    const entrada = {
-      ...this.formulario,
+    // Preparar objeto de entrada, solo incluir proveedorId si tiene valor
+    const entrada: any = {
+      numeroDocumento: this.formulario.numeroDocumento,
       usuarioId: this.currentUserId,
+      tipoDocumento: this.formulario.tipoDocumento,
+      observaciones: this.formulario.observaciones,
       detalles: this.detalles
     };
+
+    // Solo agregar proveedorId si tiene un valor válido
+    if (this.formulario.proveedorId && this.formulario.proveedorId > 0) {
+      entrada.proveedorId = this.formulario.proveedorId;
+    }
 
     this.entradaService.createEntrada(entrada).subscribe({
       next: () => {
