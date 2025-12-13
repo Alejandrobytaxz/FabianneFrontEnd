@@ -30,11 +30,9 @@ export class LoginComponent {
 
     this.authService.login({ email: this.email, password: this.password }).subscribe({
       next: (response) => {
-        console.log('Login exitoso:', response);
         this.router.navigate(['/home']);
       },
       error: (error) => {
-        console.error('Error en login:', error);
         this.errorMessage = error.error?.error || 'Error al iniciar sesión. Verifica tus credenciales.';
         this.isLoading = false;
       },

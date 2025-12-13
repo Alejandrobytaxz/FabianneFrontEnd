@@ -124,7 +124,6 @@ export class ProductosComponent implements OnInit {
     if (this.modoEdicion && this.productoSeleccionado) {
       this.productoService.updateProducto(this.productoSeleccionado.id, this.formulario).subscribe({
         next: (response) => {
-          console.log('Producto actualizado:', response);
           this.cargarProductos();
           this.cancelar();
         },
@@ -137,7 +136,6 @@ export class ProductosComponent implements OnInit {
     } else {
       this.productoService.createProducto(this.formulario).subscribe({
         next: (response) => {
-          console.log('Producto creado:', response);
           this.cargarProductos();
           this.cancelar();
         },
